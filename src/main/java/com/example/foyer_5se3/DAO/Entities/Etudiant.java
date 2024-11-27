@@ -1,0 +1,34 @@
+package com.example.foyer_5se3.DAO.Entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "T_ETUDIANT")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Etudiant implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long idEtudiant;
+    String nomEt;
+    String prenomEt;
+    long cin;
+    String ecole;
+    LocalDate dateNaissance;
+    @ManyToMany(mappedBy = "etudiants")
+    @JsonIgnore
+     private List<Reservation> reservations = new ArrayList<>();
+
+}

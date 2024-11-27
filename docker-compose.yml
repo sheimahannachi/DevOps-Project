@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: esprit
+      MYSQL_DATABASE: Devops
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    depends_on:
+      - mysql
+    image: chaimahannachi/foyer-app:latest
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/Devops?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: esprit
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+
+volumes:
+  mysql_data:
